@@ -1,0 +1,16 @@
+.vscode/**
+build/**
+node_modules/**
+packages/**
+.gitignore
+.yarnrc
+vsc-extension-quickstart.md
+**/tsconfig.json
+**/.eslintrc.json
+.eslintignore
+changelog.config.js
+commitlint.config.js
+key.text
+**/*.map
+**/*.ts
+pnpm-lock.yaml

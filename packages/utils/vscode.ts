@@ -1,6 +1,8 @@
-import { join } from 'path';
+import { basename, join } from 'path';
 import { exec } from 'child_process';
 import * as vscode from 'vscode';
+import { errorTip } from '../utils/tips';
+import type { SmippetsItem } from '../types/vscode.type';
 /**
  * 获取某个扩展文件绝对路径
  * @param context 上下文
@@ -40,23 +42,21 @@ export const updataGlobalConfig = (key: string, value: any, global = true) => {
 
 /**
  * 创建简易代码片段
- * @param name
- * @param prefix
- * @param body
- * @param description
- * @returns
  */
-export const createSnippts = (
-  name: string,
-  prefix: string | string[],
-  body: string | string[],
-  description: string
-) => {
+export const createSnipptsTemplate = ({
+  scope,
+  prefix,
+  body,
+  description,
+}: SmippetsItem) => {
   return {
-    [name]: {
-      prefix,
-      body,
-      description: description || name,
-    },
+    [prefix]: { scope, prefix, body, description },
   };
+};
+
+export const getWorkspacePath = () => {
+  if (!vscode.workspace.workspaceFolders) errorTip('当前工作区不存在！');
+  if (vscode.workspace.workspaceFolders?.length === 1) {
+    return vscode.workspace.workspaceFolders[0];
+  }
 };

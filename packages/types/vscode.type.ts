@@ -15,3 +15,11 @@ export interface ComponentLibrary {
   components: Array<any>;
   snippts?: Array<any>;
 }
+
+export interface SmippetsItem {
+  scope?: string;
+  prefix: string;
+  body: string | string[];
+  description?: string;
+}
+export type Snippets = Record<string, SmippetsItem>;

@@ -3,11 +3,13 @@
   "version": "0.0.1",
   "description": "Work fast and fish happily",
   "main": "./dist/lib/extension.js",
+  "publisher": "alqmc",
+  "repository ": {},
   "activationEvents": [
     "*"
   ],
   "engines": {
-    "vscode": "^1.47.0"
+    "vscode": "^1.67.0"
   },
   "contributes": {
     "configuration": {
@@ -24,7 +26,7 @@
     "snippets": [
       {
         "language": "typescript",
-        "path": "./packages/snippets/typescript.json"
+        "path": "./dist/lib/snippets/typescript.json"
       }
     ],
     "commands": [
@@ -62,9 +64,9 @@
   "author": "alqmc",
   "license": "ISC",
   "devDependencies": {
-    "@alqmc/build-ts": "^0.0.3",
+    "@alqmc/build-ts": "^0.0.4",
     "@alqmc/build-utils": "^0.0.3",
-    "@alqmc/eslint-config": "^0.0.3",
+    "@alqmc/eslint-config": "^0.0.4",
     "@commitlint/cli": "^9.1.2",
     "@commitlint/config-conventional": "^9.1.2",
     "@types/gulp": "^4.0.9",
@@ -79,7 +81,6 @@
     "gulp": "^4.0.2",
     "husky": "^4.3.0",
     "lint-staged": "^10.3.0",
-    "prettier": "^2.6.2",
     "sucrase": "^3.21.0",
     "typescript": "^4.6.3"
   },

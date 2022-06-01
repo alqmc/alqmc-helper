@@ -6,7 +6,6 @@ import type * as vscode from 'vscode';
 export async function activate(context: vscode.ExtensionContext) {
   registerCommands(context, commandOptions);
   registerHoverProvider(context, await getProvideHovers());
-  console.log(1);
 }
 
 export function deactivate() {}
