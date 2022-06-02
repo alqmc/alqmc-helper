@@ -57,6 +57,6 @@ export const createSnipptsTemplate = ({
 export const getWorkspacePath = () => {
   if (!vscode.workspace.workspaceFolders) errorTip('当前工作区不存在！');
   if (vscode.workspace.workspaceFolders?.length === 1) {
-    return vscode.workspace.workspaceFolders[0];
+    return vscode.workspace.workspaceFolders[0].uri.fsPath;
   }
 };

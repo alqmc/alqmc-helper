@@ -1,10 +1,11 @@
 import { mkdir } from 'fs/promises';
 import { resolve } from 'path';
 import * as vscode from 'vscode';
-import { infoTip } from '../utils/tips';
+import { errorTip, infoTip } from '../utils/tips';
 import { createSnipptsTemplate, getWorkspacePath } from '../utils/vscode';
 import { getSnipptes, writeSnipptes } from '../utils/getSnipptes';
 import { snippetsPath } from '../config/path';
+import type { SmippetsItem } from '../types/vscode.type';
 
 const getQuestion = async () => {
   const prefix = await vscode.window.showInputBox({
@@ -21,6 +22,7 @@ const getQuestion = async () => {
       'sass',
       'css',
       'html',
+      'json',
     ],
     {
       title: 'alqmc-helper:代码片段作用范围',
@@ -31,12 +33,12 @@ const getQuestion = async () => {
   const isGlobal = await vscode.window.showQuickPick(
     [
       {
-        label: 'yes',
-        value: true,
+        label: '项目代码片段',
+        value: false,
       },
       {
-        label: 'no',
-        value: false,
+        label: '全局代码片段',
+        value: true,
       },
     ],
     {
@@ -67,7 +69,22 @@ const getCurrectText = () => {
   return currectText;
 };
 
-const snipptsCreator = () => {};
+const snipptsCreator = async (
+  filePath: string,
+  snipptsOption: SmippetsItem
+) => {
+  const { scope, prefix, body, description } = snipptsOption;
+  const snippts = createSnipptsTemplate({
+    scope,
+    prefix,
+    body,
+    description,
+  });
+  let tsSnippets = await getSnipptes(filePath);
+  if (tsSnippets) tsSnippets[prefix] = snippts[prefix];
+  else tsSnippets = snippts;
+  writeSnipptes(filePath, tsSnippets);
+};
 export const createSnippts = async () => {
   const currectText = getCurrectText();
   if (!currectText) return;
@@ -77,30 +94,27 @@ export const createSnippts = async () => {
   const workspacePath = getWorkspacePath();
   if (isGlobal?.value) {
     await mkdir(snippetsPath).catch(() => {});
-  } else {
-    if (workspacePath?.uri.fsPath)
-      await mkdir(resolve(workspacePath?.uri.fsPath, `.vscode`)).catch(
-        () => {}
-      );
-  }
-
-  scope.forEach(async (fileType) => {
-    let filePath = resolve(snippetsPath, `${fileType}.json`);
-    if (!isGlobal?.value && workspacePath?.uri.fsPath) {
-      filePath = resolve(
-        workspacePath?.uri.fsPath,
-        `.vscode/${fileType}.code-snippets`
-      );
-    }
-    const snippts = createSnipptsTemplate({
-      scope: fileType,
+    scope.forEach(async (fileType) => {
+      const filePath = resolve(snippetsPath, `${fileType}.json`);
+      await snipptsCreator(filePath, {
+        prefix,
+        body: currectText.split('\n'),
+        scope: fileType,
+        description,
+      });
+    });
+    infoTip('全局代码片段需要重启vscode生效！');
+  } else if (workspacePath) {
+    await mkdir(resolve(workspacePath, `.vscode`)).catch(() => {});
+    const filePath = resolve(workspacePath, `.vscode/${prefix}.code-snippets`);
+    await snipptsCreator(filePath, {
       prefix,
       body: currectText.split('\n'),
+      scope: scope.join(','),
       description,
     });
-    let tsSnippets = await getSnipptes(filePath);
-    if (tsSnippets) tsSnippets[prefix] = snippts[prefix];
-    else tsSnippets = snippts;
-    writeSnipptes(filePath, tsSnippets);
-  });
+    infoTip('项目代码片段添加成功！');
+  } else {
+    errorTip('代码片段添加失败！');
+  }
 };

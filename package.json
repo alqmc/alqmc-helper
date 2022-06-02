@@ -4,14 +4,29 @@
   "description": "Work fast and fish happily",
   "main": "./dist/lib/extension.js",
   "publisher": "alqmc",
-  "repository ": {},
+  "repository ": {
+    "type": "git",
+    "url": "https://github.com/alqmc/alqmc-helper"
+  },
   "activationEvents": [
     "*"
+  ],
+  "categories": [
+    "Other"
   ],
   "engines": {
     "vscode": "^1.67.0"
   },
+  "icon": "dist/lib/assets/logo.png",
   "contributes": {
+    "languages": [
+      {
+        "id": "vue",
+        "extensions": [
+          ".vue"
+        ]
+      }
+    ],
     "configuration": {
       "type": "object",
       "title": "alqmc-helper",
@@ -27,6 +42,34 @@
       {
         "language": "typescript",
         "path": "./dist/lib/snippets/typescript.json"
+      },
+      {
+        "language": "javascript",
+        "path": "./dist/lib/snippets/javascript.json"
+      },
+      {
+        "language": "vue",
+        "path": "./dist/lib/snippets/vue.json"
+      },
+      {
+        "language": "scss",
+        "path": "./dist/lib/snippets/sass.json"
+      },
+      {
+        "language": "css",
+        "path": "./dist/lib/snippets/css.json"
+      },
+      {
+        "language": "markdown",
+        "path": "./dist/lib/snippets/markdown.json"
+      },
+      {
+        "language": "less",
+        "path": "./dist/lib/snippets/less.json"
+      },
+      {
+        "language": "json",
+        "path": "./dist/lib/snippets/json.json"
       }
     ],
     "commands": [
@@ -59,7 +102,8 @@
     "watch": "gulp --require sucrase/register/ts --gulpfile build/gulpfile.ts watchTask",
     "log": "npm run changelog",
     "changelog": "conventional-changelog -p custom-config  -i CHANGELOG.md  -s -r 0 -n ./changelog.config.js",
-    "push": "git push gitee master && git push github master"
+    "push": "git push gitee master && git push github master",
+    "prepare": "husky install"
   },
   "author": "alqmc",
   "license": "ISC",
@@ -69,6 +113,7 @@
     "@alqmc/eslint-config": "^0.0.4",
     "@commitlint/cli": "^9.1.2",
     "@commitlint/config-conventional": "^9.1.2",
+    "@types/fs-extra": "^9.0.13",
     "@types/gulp": "^4.0.9",
     "@types/node": "^17.0.36",
     "@types/vscode": "^1.67.0",
@@ -79,7 +124,7 @@
     "cz-conventional-changelog": "^3.2.0",
     "fs-extra": "^10.1.0",
     "gulp": "^4.0.2",
-    "husky": "^4.3.0",
+    "husky": "^8.0.0",
     "lint-staged": "^10.3.0",
     "sucrase": "^3.21.0",
     "typescript": "^4.6.3"

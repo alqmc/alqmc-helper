@@ -14,3 +14,5 @@ key.text
 **/*.map
 **/*.ts
 pnpm-lock.yaml
+.huskyrc
+.lintstagedrc
