@@ -4,15 +4,25 @@ export interface RegisterCommandsOptions {
   handler: (...args: any[]) => any;
 }
 export interface RegisterHoverProviderOptions {
-  file: Array<string> | string;
+  file: Array<string>;
   handler: vscode.HoverProvider;
 }
+export interface RegisterCompletionOptions {
+  viewID: string;
+  treeDataProvider: vscode.TreeDataProvider<unknown>;
+}
+export interface ComponentDesc {
+  path: string;
+  props?: any[];
+}
+
+export type componentMap = Record<string, ComponentDesc>;
 export interface ComponentLibrary {
   name: string;
   docs: string;
-  effective: Array<string>;
+  effectiveFile: Array<string>;
   prefix: string;
-  components: Array<any>;
+  components: componentMap;
   snippts?: Array<any>;
 }
 

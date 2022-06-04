@@ -1,5 +1,4 @@
 {
-  "extends": "@vue/tsconfig/tsconfig.node.json",
   "compilerOptions": {
     "module": "ESNext",
     "declaration": true,
@@ -17,6 +16,6 @@
     "suppressExcessPropertyErrors": true,
     "lib": ["ESNext", "DOM"]
   },
-  "include": ["packages/**/*"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules"]
 }

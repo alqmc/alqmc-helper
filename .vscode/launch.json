@@ -10,9 +10,10 @@
         "NODE_ENV": "dev"
       },
       "args": [
-        "--extensionDevelopmentPath=${workspaceFolder}",
+        "--extensionDevelopmentPath=${workspaceFolder}/packages/vscode-extension/dist",
         "--disable-extensions"
       ]
     }
   ]
 }
+

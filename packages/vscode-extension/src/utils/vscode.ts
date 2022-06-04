@@ -1,7 +1,7 @@
-import { basename, join } from 'path';
+import { join } from 'path';
 import { exec } from 'child_process';
 import * as vscode from 'vscode';
-import { errorTip } from '../utils/tips';
+import { errorTip } from './tips';
 import type { SmippetsItem } from '../types/vscode.type';
 /**
  * 获取某个扩展文件绝对路径
@@ -54,9 +54,21 @@ export const createSnipptsTemplate = ({
   };
 };
 
+/**
+ * 获取工作区路径
+ */
 export const getWorkspacePath = () => {
   if (!vscode.workspace.workspaceFolders) errorTip('当前工作区不存在！');
   if (vscode.workspace.workspaceFolders?.length === 1) {
     return vscode.workspace.workspaceFolders[0].uri.fsPath;
   }
+};
+
+export const moveCursor = (characterDelta: number) => {
+  const active = vscode.window.activeTextEditor!.selection.active!;
+  const position = active.translate({ characterDelta });
+  vscode.window.activeTextEditor!.selection = new vscode.Selection(
+    position,
+    position
+  );
 };

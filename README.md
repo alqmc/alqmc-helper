@@ -1,10 +1,9 @@
-## 代码辅助工具
+## alqmc-helper
 
-- 组件库定制提示工具
-- 常用工具库函数提示
-- 快速创建代码片段
+- vscode 插件
 
-#### 配置文件可以从 workspace 中读取
+- chrome 插件
 
-- .alqmc-helper
-  - libs
+- node-server
+
+- web-server

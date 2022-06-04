@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import type {
   RegisterCommandsOptions,
+  RegisterCompletionOptions,
   RegisterHoverProviderOptions,
 } from '../types/vscode.type';
 
@@ -41,4 +42,14 @@ export const registerHoverProvider = (
   });
   context.subscriptions.push(...hoverProviders);
   return hoverProviders;
+};
+
+export const registerCompletionItemProvider = (
+  context: vscode.ExtensionContext,
+  registerOptions: RegisterCompletionOptions[]
+) => {
+  const treeDataProvider = registerOptions.map((x) => {
+    return vscode.window.registerTreeDataProvider(x.viewID, x.treeDataProvider);
+  });
+  context.subscriptions.push(...treeDataProvider);
 };

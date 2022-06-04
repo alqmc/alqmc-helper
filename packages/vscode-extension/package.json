@@ -1,0 +1,156 @@
+{
+  "name": "alqmc-helper",
+  "version": "0.0.1",
+  "description": "Work fast and fish happily",
+  "main": "extension.js",
+  "publisher": "alqmc",
+  "repository ": {
+    "type": "git",
+    "url": "https://github.com/alqmc/alqmc-helper"
+  },
+  "activationEvents": [
+    "*"
+  ],
+  "categories": [
+    "Other"
+  ],
+  "engines": {
+    "vscode": "^1.67.0"
+  },
+  "icon": "public/logo.png",
+  "contributes": {
+    "languages": [
+      {
+        "id": "vue",
+        "extensions": [
+          ".vue"
+        ]
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "alqmc-helper",
+      "properties": {
+        "alqmcHelper.componentLibrarydisabled": {
+          "type": "array",
+          "default": [],
+          "description": "禁用组件库提示列表"
+        }
+      }
+    },
+    "snippets": [
+      {
+        "language": "typescript",
+        "path": "snippets/typescript.json"
+      },
+      {
+        "language": "javascript",
+        "path": "snippets/javascript.json"
+      },
+      {
+        "language": "vue",
+        "path": "snippets/vue.json"
+      },
+      {
+        "language": "scss",
+        "path": "snippets/sass.json"
+      },
+      {
+        "language": "css",
+        "path": "snippets/css.json"
+      },
+      {
+        "language": "markdown",
+        "path": "snippets/markdown.json"
+      },
+      {
+        "language": "less",
+        "path": "snippets/less.json"
+      },
+      {
+        "language": "json",
+        "path": "snippets/json.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "alqmc-helper.refreshEntry",
+        "title": "刷新",
+        "icon": {
+          "light": "public/refresh-light.svg",
+          "dark": "public/refresh-dark.svg"
+        }
+      },
+      {
+        "command": "alqmc-helper.create-snippets",
+        "title": "创建代码片段"
+      },
+      {
+        "command": "alqmc-helper.fast-log",
+        "title": "生成console"
+      },
+      {
+        "command": "alqmc-helper.open-file",
+        "title": "打开文件"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "alqmc-helper.create-snippets",
+          "when": "editorHasSelection",
+          "group": "navigation@1"
+        },
+        {
+          "command": "alqmc-helper.fast-log",
+          "when": "editorHasSelection",
+          "group": "navigation@1"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "alqmc-helper.refreshEntry",
+          "when": "view == codeSnipptes",
+          "group": "navigation"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "codeHome",
+          "title": "代码屋",
+          "icon": "public/logo48.svg"
+        }
+      ]
+    },
+    "views": {
+      "codeHome": [
+        {
+          "id": "componentLib",
+          "name": "组件提示库"
+        },
+        {
+          "id": "codeSnipptes",
+          "name": "全局代码片段"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "codeSnipptes",
+        "contents": "\n还没有创建过全局代码"
+      }
+    ]
+  },
+  "scripts": {
+    "build:pkg": "cd dist && vsce package"
+  },
+  "author": "alqmc",
+  "license": "ISC",
+  "devDependencies": {
+    "@alqmc/eslint-config": "^0.0.4",
+    "@types/vscode": "^1.67.0",
+    "fast-glob": "^3.2.11"
+  }
+}
