@@ -103,7 +103,13 @@ export const createSnippts = async () => {
         description,
       });
     });
-    infoTip('全局代码片段需要重启vscode生效！');
+    infoTip('全局代码片段需要重启vscode生效！', '重启编辑器').then(
+      (selection) => {
+        if (selection === '重启编辑器') {
+          vscode.commands.executeCommand('workbench.action.reloadWindow');
+        }
+      }
+    );
   } else if (workspacePath) {
     await mkdir(resolve(workspacePath, `.vscode`)).catch(() => {});
     const filePath = resolve(workspacePath, `.vscode/${prefix}.code-snippets`);
@@ -113,7 +119,7 @@ export const createSnippts = async () => {
       scope: scope.join(','),
       description,
     });
-    infoTip('项目代码片段添加成功！');
+    infoTip('项目代码片段添加成功');
   } else {
     errorTip('代码片段添加失败！');
   }

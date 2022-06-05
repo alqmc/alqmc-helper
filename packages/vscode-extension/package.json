@@ -149,7 +149,6 @@
   "author": "alqmc",
   "license": "ISC",
   "devDependencies": {
-    "@alqmc/eslint-config": "^0.0.4",
     "@types/vscode": "^1.67.0",
     "fast-glob": "^3.2.11"
   }

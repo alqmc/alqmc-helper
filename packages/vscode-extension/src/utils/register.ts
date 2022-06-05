@@ -3,6 +3,7 @@ import type {
   RegisterCommandsOptions,
   RegisterCompletionOptions,
   RegisterHoverProviderOptions,
+  RegisterTreeDataOptions,
 } from '../types/vscode.type';
 
 /**
@@ -43,10 +44,29 @@ export const registerHoverProvider = (
   context.subscriptions.push(...hoverProviders);
   return hoverProviders;
 };
-
+/**
+ * 注册自动补全
+ * @param context
+ * @param registerOptions
+ */
 export const registerCompletionItemProvider = (
   context: vscode.ExtensionContext,
   registerOptions: RegisterCompletionOptions[]
+) => {
+  const completionProvider = registerOptions.map((x) => {
+    return vscode.languages.registerCompletionItemProvider(x.file, x.provider);
+  });
+  context.subscriptions.push(...completionProvider);
+};
+
+/**
+ * 注册侧边菜单视图
+ * @param context
+ * @param registerOptions
+ */
+export const registerTreeDataProvider = (
+  context: vscode.ExtensionContext,
+  registerOptions: RegisterTreeDataOptions[]
 ) => {
   const treeDataProvider = registerOptions.map((x) => {
     return vscode.window.registerTreeDataProvider(x.viewID, x.treeDataProvider);

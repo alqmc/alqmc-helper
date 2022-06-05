@@ -7,13 +7,26 @@ export interface RegisterHoverProviderOptions {
   file: Array<string>;
   handler: vscode.HoverProvider;
 }
+
 export interface RegisterCompletionOptions {
+  file: string[];
+  provider: vscode.CompletionItemProvider<vscode.CompletionItem>;
+}
+export interface RegisterTreeDataOptions {
   viewID: string;
   treeDataProvider: vscode.TreeDataProvider<unknown>;
 }
+
+export interface ComponentProps extends Record<string, any> {
+  name: string;
+  default?: string;
+  type?: string;
+  require?: boolean;
+  desc: string;
+}
 export interface ComponentDesc {
   path: string;
-  props?: any[];
+  props?: ComponentProps[];
 }
 
 export type componentMap = Record<string, ComponentDesc>;

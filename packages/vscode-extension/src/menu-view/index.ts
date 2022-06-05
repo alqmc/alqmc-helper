@@ -3,7 +3,7 @@ import glob from 'fast-glob';
 import * as vscode from 'vscode';
 import { rootPath, snippetsPath } from '../config/path';
 import { getSnipptes } from '../utils/getSnipptes';
-export class NodeDependenciesProvider
+export class CodeTreeProvider
   implements vscode.TreeDataProvider<CodeNodeViewItem>
 {
   constructor() {}
@@ -88,7 +88,7 @@ export class NodeDependenciesProvider
   > = new vscode.EventEmitter<CodeNodeViewItem | undefined | null | void>();
   readonly onDidChangeTreeData: vscode.Event<
     CodeNodeViewItem | undefined | null | void
-  > = NodeDependenciesProvider._onDidChangeTreeData.event;
+  > = CodeTreeProvider._onDidChangeTreeData.event;
   static refresh(): void {
     this._onDidChangeTreeData.fire();
   }

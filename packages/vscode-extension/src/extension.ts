@@ -2,21 +2,24 @@ import {
   registerCommands,
   registerCompletionItemProvider,
   registerHoverProvider,
+  registerTreeDataProvider,
 } from './utils/register';
 import { commandOptions } from './command';
 import { getProvideHovers } from './hover';
-import { NodeDependenciesProvider } from './menu-view';
+import { CodeTreeProvider } from './menu-view';
+import { getCompletionOptions } from './completion';
 import type * as vscode from 'vscode';
 
 export async function activate(context: vscode.ExtensionContext) {
   registerCommands(context, commandOptions);
   registerHoverProvider(context, await getProvideHovers());
-  registerCompletionItemProvider(context, [
+  registerTreeDataProvider(context, [
     {
       viewID: 'codeSnipptes',
-      treeDataProvider: new NodeDependenciesProvider(),
+      treeDataProvider: new CodeTreeProvider(),
     },
   ]);
+  registerCompletionItemProvider(context, getCompletionOptions());
 }
 
 export function deactivate() {}

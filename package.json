@@ -7,7 +7,8 @@
     "prepare": "husky install",
     "vscode:build": "gulp --require sucrase/register/ts --gulpfile build/gulpfile.ts vscode",
     "vscode:watch": "gulp --require sucrase/register/ts --gulpfile build/gulpfile.ts watchVscode",
-    "vscode:pkg": "pnpm run --filter ./packages/vscode-extension build:pkg"
+    "vscode:pkg": "pnpm run --filter ./packages/vscode-extension build:pkg",
+    "push": "git push gitee master && git push github master"
   },
   "keywords": [],
   "author": "",
