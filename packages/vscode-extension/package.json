@@ -11,7 +11,12 @@
   "activationEvents": [
     "*"
   ],
+  "keywords": [
+    "快速代码片段",
+    "组件库提示"
+  ],
   "categories": [
+    "Snippets",
     "Other"
   ],
   "engines": {
@@ -128,7 +133,8 @@
       "codeHome": [
         {
           "id": "componentLib",
-          "name": "组件提示库"
+          "name": "组件提示库",
+          "when": "false"
         },
         {
           "id": "codeSnipptes",
@@ -149,7 +155,8 @@
   "author": "alqmc",
   "license": "ISC",
   "devDependencies": {
-    "@types/vscode": "^1.67.0",
-    "fast-glob": "^3.2.11"
+    "fast-glob": "^3.2.11",
+    "fs-extra": "^10.1.0",
+    "@types/vscode": "^1.67.0"
   }
 }

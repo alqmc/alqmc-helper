@@ -1,4 +1,4 @@
-import { readFile } from 'fs-extra';
+import { readFile } from 'fs/promises';
 import * as vscode from 'vscode';
 export const openFile = async (path: string, label: string) => {
   const fileText = await readFile(path, 'utf-8');

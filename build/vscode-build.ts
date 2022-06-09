@@ -1,7 +1,6 @@
 import { resolve } from 'path';
 import { buildTypescriptLib } from '@alqmc/build-ts';
 import { copy } from 'fs-extra';
-import { series } from 'gulp';
 import { vscodeExtensionPath } from './path';
 import type { DefineLibConfig } from '@alqmc/build-ts';
 
@@ -12,8 +11,9 @@ const buildConfig: DefineLibConfig = {
     outPutPath: resolve(vscodeExtensionPath, 'dist'),
     tsConfigPath: resolve(vscodeExtensionPath, 'tsconfig.json'),
     pkgPath: resolve(vscodeExtensionPath, 'package.json'),
+    preserveModules: false,
   },
-  externalOptions: ['vscode', 'fast-glob', 'fs-extra'],
+  externalOptions: ['vscode'],
   buildProduct: ['lib'],
   pureOutput: true,
 };

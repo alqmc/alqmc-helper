@@ -19,14 +19,17 @@ export interface RegisterTreeDataOptions {
 
 export interface ComponentProps extends Record<string, any> {
   name: string;
-  default?: string;
-  type?: string;
   require?: boolean;
+  default?: string | number | boolean;
+  type?: string;
   desc: string;
 }
 export interface ComponentDesc {
   path: string;
   props?: ComponentProps[];
+  event?: any;
+  slot?: any;
+  childComponent: ComponentDesc[];
 }
 
 export type componentMap = Record<string, ComponentDesc>;

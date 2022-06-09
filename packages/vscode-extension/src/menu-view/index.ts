@@ -30,28 +30,32 @@ export class CodeTreeProvider
       } else {
         let count = 0;
         const treeNode: CodeNodeViewItem[] = [];
-        snippetsFile.forEach((x) => {
-          this.getSnippte([x])
-            .then((node) => {
-              if (node.length > 0) {
-                treeNode.push(
-                  new CodeNodeViewItem(
-                    basename(x, '.json'),
-                    '',
-                    1,
-                    false,
-                    basename(x, '.json')
-                  )
-                );
-              }
-            })
-            .finally(() => {
-              count++;
-              if (snippetsFile.length === count) {
-                resolve(treeNode);
-              }
-            });
-        });
+        if (snippetsFile.length === 0) {
+          resolve(treeNode);
+        } else {
+          snippetsFile.forEach((x) => {
+            this.getSnippte([x])
+              .then((node) => {
+                if (node.length > 0) {
+                  treeNode.push(
+                    new CodeNodeViewItem(
+                      basename(x, '.json'),
+                      '',
+                      1,
+                      false,
+                      basename(x, '.json')
+                    )
+                  );
+                }
+              })
+              .finally(() => {
+                count++;
+                if (snippetsFile.length === count) {
+                  resolve(treeNode);
+                }
+              });
+          });
+        }
       }
     });
   }

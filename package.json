@@ -14,8 +14,9 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@alqmc/build-ts": "^0.0.6",
+    "@alqmc/build-ts": "^0.0.7",
     "@alqmc/build-utils": "^0.0.3",
+    "@alqmc/eslint-config": "^0.0.4",
     "@commitlint/cli": "^9.1.2",
     "@commitlint/config-conventional": "^9.1.2",
     "@types/fs-extra": "^9.0.13",

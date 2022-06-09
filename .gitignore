@@ -1,2 +1,6 @@
 node_modules
+uxd
 dist
+uxd-ui.ts
+vix-core.ts
+index.ts
