@@ -72,3 +72,57 @@ export const moveCursor = (characterDelta: number) => {
     position
   );
 };
+
+/**
+ * 获取当前位置单词
+ * @param document
+ * @param position
+ * @returns
+ */
+export const getWordRangeAtPosition = (
+  document: vscode.TextDocument,
+  position: vscode.Position
+) => {
+  const word = document.getWordRangeAtPosition(
+    position,
+    /([A-z]{1,}[-]{0,1}){1,}[A-z]{1,}/g
+  );
+  return document.getText(word);
+};
+
+/**
+ * 找到前置未闭合的标签
+ * @param document
+ * @param position
+ * @returns
+ */
+export const findTag = (
+  document: vscode.TextDocument,
+  position: vscode.Position
+): string | null => {
+  const writeTag = ['template'];
+  const line = document.lineAt(position);
+  const tagStart = line.text.indexOf('<');
+  const tagReg = /<\/{0,1}[A-z-]*/;
+  if (tagStart !== -1) {
+    let tag: null | string = null;
+    const tagExpMatchArray = line.text.match(tagReg);
+    if (tagExpMatchArray && tagExpMatchArray.length > 0) {
+      tag = tagExpMatchArray[0].replace(/[/<]/g, '');
+      if (writeTag.includes(tag)) {
+        const newPosition = new vscode.Position(
+          position.line - 1,
+          position.character
+        );
+        return findTag(document, newPosition);
+      }
+    }
+    return tag;
+  } else {
+    const newPosition = new vscode.Position(
+      position.line - 1,
+      position.character
+    );
+    return findTag(document, newPosition);
+  }
+};

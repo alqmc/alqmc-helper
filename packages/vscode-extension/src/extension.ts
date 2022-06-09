@@ -12,7 +12,7 @@ import type * as vscode from 'vscode';
 
 export async function activate(context: vscode.ExtensionContext) {
   registerCommands(context, commandOptions);
-  registerHoverProvider(context, await getProvideHovers());
+  registerHoverProvider(context, getProvideHovers());
   registerTreeDataProvider(context, [
     {
       viewID: 'codeSnipptes',

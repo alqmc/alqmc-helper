@@ -20,25 +20,47 @@ export interface RegisterTreeDataOptions {
 export interface ComponentProps extends Record<string, any> {
   name: string;
   require?: boolean;
-  default?: string | number | boolean;
+  default?: string | number | boolean | Array<any> | object;
   type?: string;
   desc: string;
+  example?: string;
 }
-export interface ComponentDesc {
-  path: string;
-  props?: ComponentProps[];
-  event?: any;
-  slot?: any;
-  childComponent: ComponentDesc[];
+export interface ComponentEvent {
+  name: string;
+  desc: string;
+  require?: boolean;
+  type?: 'native' | 'custom';
+  default?: string;
 }
 
-export type componentMap = Record<string, ComponentDesc>;
+export interface ComponentSlot {
+  name: string;
+  desc: string;
+  default?: string;
+  slotProps?: any;
+}
+export interface ComponentDesc {
+  key: string;
+  path?: string;
+  desc?: string;
+  props?: ComponentProps[];
+  event?: ComponentEvent[];
+  slot?: ComponentSlot[];
+  childComponent?: ComponentDesc[];
+}
+
+export type Component = Array<ComponentDesc>;
+
+export interface EffectiveFile {
+  components: Array<string>;
+  snippts?: Array<string>;
+}
 export interface ComponentLibrary {
   name: string;
   docs: string;
-  effectiveFile: Array<string>;
+  effectiveFile: EffectiveFile;
   prefix: string;
-  components: componentMap;
+  components: Array<ComponentDesc>;
   snippts?: Array<any>;
 }
 
