@@ -37,7 +37,7 @@ export interface ComponentSlot {
   name: string;
   desc: string;
   default?: string;
-  slotProps?: any;
+  slotProps?: ComponentProps[];
 }
 export interface ComponentDesc {
   key: string;

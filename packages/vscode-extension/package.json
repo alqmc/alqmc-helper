@@ -133,8 +133,7 @@
       "codeHome": [
         {
           "id": "componentLib",
-          "name": "组件提示库",
-          "when": "false"
+          "name": "组件提示库"
         },
         {
           "id": "codeSnipptes",

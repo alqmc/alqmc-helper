@@ -6,7 +6,12 @@ import {
 } from '../utils/vscode';
 import libs from '../config/libs';
 import { bigCamelize, kebabCase } from '../utils/tool';
-import { docsMdRender, propsMdRender } from '../utils/markdown';
+import {
+  componentMdRender,
+  eventMdRender,
+  propsMdRender,
+  slotMdRender,
+} from '../utils/markdown';
 import type {
   ComponentDesc,
   ComponentLibrary,
@@ -58,33 +63,23 @@ const createComponentHover = (
     document: vscode.TextDocument,
     position: vscode.Position
   ) => {
-    const { prefix, components, docs } = lib;
+    const { prefix, components } = lib;
     const tag = findTag(document, position);
     if (!tag) return;
     const currentComponent = getCurrentComponent(tag, prefix, components);
     if (!currentComponent) return;
-    const componentRender = `#### 组件: ${bigCamelize(
-      lib.prefix + currentComponent.component.key
-    )}`;
-    const childComponentRender = '';
-    const titleRender = ``;
-    let docsRender = ``;
-    let propsRender = '';
-    const line = document.lineAt(position);
-
-    if (line) {
+    let componentRender = new vscode.MarkdownString('');
+    let propsRender = new vscode.MarkdownString('');
+    let slotRender = new vscode.MarkdownString('');
+    let eventRender = new vscode.MarkdownString('');
+    const word = getWordRangeAtPosition(document, position);
+    if (word) {
       const componentTag = lib.prefix + currentComponent.component.key;
       const bigCamelizeTag = bigCamelize(componentTag);
-      const text =
-        line.text.includes(bigCamelizeTag) || line.text.includes(componentTag);
-      if (text)
-        docsRender = docsMdRender(
-          lib.name,
-          docs + currentComponent.component.path
-        );
+      if (word === componentTag || word === bigCamelizeTag) {
+        componentRender = componentMdRender(lib, currentComponent.component);
+      }
     }
-
-    const word = getWordRangeAtPosition(document, position);
     if (
       currentComponent.isChild &&
       currentComponent.component.childComponent &&
@@ -94,28 +89,59 @@ const createComponentHover = (
         if (x.props) {
           x.props.forEach((prop) => {
             if (prop.name === word) {
-              propsRender = propsMdRender([prop]);
+              propsRender = propsMdRender(prop);
+            }
+          });
+        }
+        if (x.slot) {
+          x.slot.forEach((slot) => {
+            if (slot.name === word) {
+              slotRender = slotMdRender(slot);
+            }
+            if (slot.slotProps) {
+              slot.slotProps.forEach((x) => {
+                if (x.name === word)
+                  slotRender = propsMdRender(x, 'slots:props');
+              });
+            }
+          });
+        }
+        if (x.event) {
+          x.event.forEach((event) => {
+            if (event.name === word) {
+              eventRender = eventMdRender(event);
             }
           });
         }
       });
     } else {
+      currentComponent.component.slot?.forEach((x) => {
+        if (x.name === word) {
+          slotRender = slotMdRender(x);
+        }
+        if (x.slotProps) {
+          x.slotProps.forEach((x) => {
+            if (x.name === word) slotRender = propsMdRender(x, 'slots:props');
+          });
+        }
+      });
+      currentComponent.component.event?.forEach((x) => {
+        if (x.name === word) {
+          eventRender = eventMdRender(x);
+        }
+      });
       currentComponent.component.props?.forEach((x) => {
         if (x.name === word) {
-          propsRender = propsMdRender([x]);
+          propsRender = propsMdRender(x);
         }
       });
     }
-    let hoverRender = '';
-    if (childComponentRender) hoverRender += `\n\n${childComponentRender}`;
-    if (componentRender) hoverRender += `\n\n${componentRender}`;
-    if (titleRender) hoverRender += `\n\n${titleRender}`;
-    if (docsRender) hoverRender += `\n\n${docsRender}`;
-    if (propsRender) hoverRender = propsRender;
-    console.log(hoverRender);
-    const md = new vscode.MarkdownString(hoverRender);
-    md.isTrusted = true;
-    return new vscode.Hover(md);
+    return new vscode.Hover([
+      propsRender,
+      eventRender,
+      slotRender,
+      componentRender,
+    ]);
   };
   return {
     file: lib.effectiveFile.components,

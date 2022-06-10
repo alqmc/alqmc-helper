@@ -126,3 +126,10 @@ export const findTag = (
     return findTag(document, newPosition);
   }
 };
+
+export const makeCodeblock = (text: string): string => {
+  if (text.match(/^\s*[~`]{3}/g)) {
+    return text;
+  }
+  return `\`\`\`\n${text}\n\`\`\``;
+};
