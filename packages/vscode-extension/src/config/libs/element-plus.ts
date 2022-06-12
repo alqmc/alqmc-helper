@@ -2,10 +2,14 @@ import type { ComponentLibrary } from '../../types/vscode.type';
 export const elementPlus: ComponentLibrary = {
   name: 'ElementPlus',
   docs: 'https://element-plus.gitee.io/zh-CN/',
-  effectiveFile: ['vue', 'typescript', 'javascript'],
+  effectiveFile: {
+    components: ['vue'],
+    snippts: ['vue', 'typescript', 'javascript'],
+  },
   prefix: 'el-',
-  components: {
-    button: {
+  components: [
+    {
+      name: 'button',
       path: 'views/components/button.html',
       props: [
         {
@@ -21,14 +25,16 @@ export const elementPlus: ComponentLibrary = {
         },
       ],
     },
-    icon: {
+    {
+      name: 'icon',
       path: 'views/components/icon.html',
       props: [],
     },
-    alert: {
+    {
+      name: 'alert',
       path: 'views/components/alert.html',
       props: [],
     },
-  },
+  ],
 };
 export default elementPlus;

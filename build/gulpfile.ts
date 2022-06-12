@@ -1,5 +1,5 @@
 import { resolve } from 'path';
-import { withTask } from '@alqmc/build-utils';
+import { run, withTask } from '@alqmc/build-utils';
 import { series, task, watch } from 'gulp';
 import { vscodeBuild, vscodeCopyFile } from './vscode-build';
 import { vscodeExtensionPath } from './path';
@@ -7,8 +7,9 @@ import { vscodeExtensionPath } from './path';
 task('watchVscode', () => {});
 
 export const vscode = series(
+  withTask('clear', () => run('pnpm run vscode:clear')),
   withTask('vscode-build', vscodeBuild),
-  withTask('vscode-conpy', vscodeCopyFile)
+  withTask('vscode-copy', vscodeCopyFile)
 );
 export const vscodeExtension = withTask('vscode-watch', () => {
   watch(resolve(vscodeExtensionPath, 'src'), vscode);

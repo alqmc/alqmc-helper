@@ -29,7 +29,7 @@ export interface ComponentEvent {
   name: string;
   desc: string;
   require?: boolean;
-  type?: 'native' | 'custom';
+  type?: string;
   default?: string;
 }
 
@@ -40,7 +40,7 @@ export interface ComponentSlot {
   slotProps?: ComponentProps[];
 }
 export interface ComponentDesc {
-  key: string;
+  name: string;
   path?: string;
   desc?: string;
   props?: ComponentProps[];

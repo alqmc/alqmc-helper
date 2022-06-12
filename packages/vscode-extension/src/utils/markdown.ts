@@ -10,11 +10,12 @@ import type {
 
 export const componentMdRender = (
   lib: ComponentLibrary,
-  component: ComponentDesc
+  component: ComponentDesc,
+  showDoc = true
 ) => {
   const hoverContent = new vscode.MarkdownString('', true);
   hoverContent.appendCodeblock(
-    `${bigCamelize(lib.prefix + component.key)}`,
+    `${bigCamelize(lib.prefix + component.name)}`,
     'typescript'
   );
   if (component.props && component.props.length > 0) {
@@ -43,12 +44,13 @@ export const componentMdRender = (
       hoverContent.appendCodeblock(`${x.name}: '${x.desc}'\n`, 'typescript');
     });
   }
-  hoverContent.appendMarkdown(
-    `\n文档：[${lib.name}-${bigCamelize(lib.prefix + component.key)}](${
-      lib.docs + component.path
-    })`
-  );
-  hoverContent.appendText('\n\r');
+  if (showDoc) {
+    hoverContent.appendMarkdown(
+      `\n文档：[${lib.name}-${bigCamelize(lib.prefix + component.name)}](${
+        lib.docs + component.path
+      })`
+    );
+  }
   return hoverContent;
 };
 
@@ -59,7 +61,11 @@ export const propsMdRender = (props: ComponentProps, type = 'props') => {
     `(${type}) ${props.name}${require}:${props.type}`,
     'typescript'
   );
-  hoverContent.appendText(`@desc——${props.desc}`);
+  hoverContent.appendText(`@desc——${props.desc}\n`);
+  if (props.example) {
+    hoverContent.appendMarkdown(`@example\n`);
+    hoverContent.appendCodeblock(`${props.example}\n`, 'typescript');
+  }
   return hoverContent;
 };
 

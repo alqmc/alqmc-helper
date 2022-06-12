@@ -1,0 +1,18 @@
+{
+  "com": {
+    "scope": "typescript",
+    "prefix": "com",
+    "body": [
+      "export const ${1} = {\r",
+      "  name: '',\r",
+      "  path: 'views/components/${1}.html',\r",
+      "  slot: [],\r",
+      "  event: [],\r",
+      "  childComponent: [],\r",
+      "  props: [],\r",
+      "},"
+    ],
+    "description": "导出组件模板"
+  }
+}
+

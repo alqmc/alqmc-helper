@@ -1,0 +1,8 @@
+{
+  "exp": {
+    "scope": "typescript",
+    "prefix": "exp",
+    "body": ["export { ${1} } from './props/${1}';"],
+    "description": "export"
+  }
+}

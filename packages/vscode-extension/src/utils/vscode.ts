@@ -85,7 +85,7 @@ export const getWordRangeAtPosition = (
 ) => {
   const word = document.getWordRangeAtPosition(
     position,
-    /([A-z]{1,}[-]{0,1}){1,}[A-z]{1,}/g
+    /([#@]{0,1}[A-z]{1,}[-]{0,1}){1,}[A-z]{1,}/
   );
   return document.getText(word);
 };
@@ -103,7 +103,7 @@ export const findTag = (
   const writeTag = ['template'];
   const line = document.lineAt(position);
   const tagStart = line.text.indexOf('<');
-  const tagReg = /<\/{0,1}[A-z-]*/;
+  const tagReg = /<\/{0,1}[A-z-]*/g;
   if (tagStart !== -1) {
     let tag: null | string = null;
     const tagExpMatchArray = line.text.match(tagReg);

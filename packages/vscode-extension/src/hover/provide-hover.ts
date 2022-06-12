@@ -5,7 +5,7 @@ import {
   getWordRangeAtPosition,
 } from '../utils/vscode';
 import libs from '../config/libs';
-import { bigCamelize, kebabCase } from '../utils/tool';
+import { compareTag } from '../utils/tool';
 import {
   componentMdRender,
   eventMdRender,
@@ -32,10 +32,8 @@ const getCurrentComponent = (
 ) => {
   let isChild = false;
   const component = components.filter((component) => {
-    const reg = kebabCase(prefix + component.key);
-    const regBig = bigCamelize(prefix + component.key);
-    if (tag && (tag.includes(reg) || tag.includes(regBig))) return true;
-    if (component.childComponent) {
+    if (tag && compareTag(tag, prefix + component.name)) return true;
+    if (component.childComponent && component.childComponent.length > 0) {
       const child = getCurrentComponent(tag, prefix, component.childComponent);
       if (child) {
         isChild = true;
@@ -70,76 +68,81 @@ const createComponentHover = (
     if (!currentComponent) return;
     let componentRender = new vscode.MarkdownString('');
     let propsRender = new vscode.MarkdownString('');
+    let slotPropsRender = new vscode.MarkdownString('');
     let slotRender = new vscode.MarkdownString('');
     let eventRender = new vscode.MarkdownString('');
     const word = getWordRangeAtPosition(document, position);
-    if (word) {
-      const componentTag = lib.prefix + currentComponent.component.key;
-      const bigCamelizeTag = bigCamelize(componentTag);
-      if (word === componentTag || word === bigCamelizeTag) {
-        componentRender = componentMdRender(lib, currentComponent.component);
-      }
-    }
     if (
       currentComponent.isChild &&
       currentComponent.component.childComponent &&
       currentComponent.component.childComponent.length > 0
     ) {
       currentComponent.component.childComponent.forEach((x) => {
+        const componentTag = lib.prefix + x.name;
+        if (compareTag(word, componentTag)) {
+          componentRender = componentMdRender(lib, x, false);
+        }
         if (x.props) {
           x.props.forEach((prop) => {
-            if (prop.name === word) {
+            if (compareTag(prop.name, word)) {
               propsRender = propsMdRender(prop);
             }
           });
         }
         if (x.slot) {
           x.slot.forEach((slot) => {
-            if (slot.name === word) {
+            if (compareTag(`#${slot.name}`, word)) {
               slotRender = slotMdRender(slot);
             }
             if (slot.slotProps) {
               slot.slotProps.forEach((x) => {
-                if (x.name === word)
-                  slotRender = propsMdRender(x, 'slots:props');
+                if (compareTag(x.name, word))
+                  slotPropsRender = propsMdRender(x, 'slots:props');
               });
             }
           });
         }
         if (x.event) {
           x.event.forEach((event) => {
-            if (event.name === word) {
+            if (compareTag(`@${event.name}`, word)) {
               eventRender = eventMdRender(event);
             }
           });
         }
       });
     } else {
+      const componentTag = lib.prefix + currentComponent.component.name;
+      if (compareTag(word, componentTag)) {
+        componentRender = componentMdRender(lib, currentComponent.component);
+      }
       currentComponent.component.slot?.forEach((x) => {
-        if (x.name === word) {
+        if (compareTag(`#${x.name}`, word)) {
           slotRender = slotMdRender(x);
         }
         if (x.slotProps) {
           x.slotProps.forEach((x) => {
-            if (x.name === word) slotRender = propsMdRender(x, 'slots:props');
+            if (compareTag(x.name, word))
+              slotPropsRender = propsMdRender(x, 'slots:props');
           });
         }
       });
       currentComponent.component.event?.forEach((x) => {
-        if (x.name === word) {
+        if (compareTag(`@${x.name}`, word)) {
           eventRender = eventMdRender(x);
         }
       });
       currentComponent.component.props?.forEach((x) => {
-        if (x.name === word) {
+        if (compareTag(x.name, word)) {
           propsRender = propsMdRender(x);
         }
       });
     }
+
     return new vscode.Hover([
       propsRender,
       eventRender,
       slotRender,
+      slotPropsRender,
       componentRender,
     ]);
   };
@@ -190,7 +193,9 @@ const createHandler = (
  * @returns
  */
 export const getProvideHovers = () => {
-  const disabledList = getGlobalConfig('alqmcHelper.disabled') as string[];
+  const disabledList = getGlobalConfig(
+    'alqmcHelper.componentLibrarydisabled'
+  ) as string[];
   const effectiveLib = Object.keys(libs).filter(
     (x) => !disabledList || !disabledList.includes(x)
   );
